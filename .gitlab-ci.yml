@@ -25,7 +25,9 @@ workflow:
       -u $IMAGE_REGISTRY_USER
       --password-stdin
       $INTERNAL_REG
-    - docker buildx create --use
+    - >
+      docker buildx create --use
+      --platform=linux/arm64,linux/amd64 --name win-mac-multi
   script:
     - >
       docker buildx build
