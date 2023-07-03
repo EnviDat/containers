@@ -24,7 +24,7 @@ ENV LC_ALL en_US.UTF-8
 
 FROM base as extract-deps
 WORKDIR /opt/python
-COPY pyproject.toml pdm.lock README.md /opt/python/
+COPY pyproject.toml pdm.lock /opt/python/
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir pdm==2.7.4
 RUN pdm export > requirements.txt
