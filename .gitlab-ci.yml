@@ -25,7 +25,9 @@ workflow:
       -u $IMAGE_REGISTRY_USER
       --password-stdin
       $INTERNAL_REG
-    - docker context create tls-environment
+    - >
+      docker context create tls-environment
+      --docker "host=tcp://docker:2375"
     - >
       docker buildx create --use tls-environment
       --driver docker-container --name multi-arch-builder
