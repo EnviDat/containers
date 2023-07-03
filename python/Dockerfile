@@ -66,8 +66,11 @@ COPY --from=build \
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \
     && chown -R appuser:appuser /opt /home/appuser
+# Add entrypoint
+COPY entrypoint.sh /docker-entrypoint.sh
 # Pre-compile packages to .pyc (init perf gains)
-RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
+RUN chmod +x /docker-entrypoint.sh \
+    && python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
 USER appuser
 ENTRYPOINT ["python"]
 CMD []
