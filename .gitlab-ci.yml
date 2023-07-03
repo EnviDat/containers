@@ -153,3 +153,24 @@ python-3.11-retag:
     - .retag
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11"
+
+python-3.11-geo-build:
+  extends:
+    - .build
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11-geo"
+    CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
+    BASE_IMG_TAG: "3.11-slim-bookwork"
+
+python-3.11-geo-scan:
+  extends:
+    - .scan
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11-geo"
+    SHORT_NAME: "py3.11-geo"
+
+python-3.11-geo-retag:
+  extends:
+    - .retag
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11-geo"
