@@ -6,8 +6,8 @@ stages:
 variables:
   ARTIFACT_COMPRESSION_LEVEL: "fast"
   CACHE_COMPRESSION_LEVEL: "fast"
-  DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
 
 workflow:
   rules:
@@ -20,23 +20,18 @@ workflow:
   stage: build
   image: docker.io/docker:24
   services:
-    - docker:24-dind
+    - name: docker:24-dind
   before_script:
     - >
       echo $IMAGE_REGISTRY_PASS | docker login
       -u $IMAGE_REGISTRY_USER
       --password-stdin
       $INTERNAL_REG
-    - docker context create tls-environment
-    - >
-      docker buildx create --use tls-environment
-      --driver docker-container --name multi-arch-builder
+    - docker buildx create --name multi-arch-builder --use
   script:
     - >
-      docker buildx build
+      docker buildx build "${CONTEXT_DIR}"
       --platform linux/arm/v7,linux/arm64/v8,linux/amd64
-      --build-context "${CONTEXT_DIR}"
-      --file "${CONTEXT_DIR}/Dockerfile"
       --tag "${IMAGE_NAME}-unverified"
       --build-arg MAINTAINER=${MAINTAINER}
       --build-arg EXTERNAL_REG="${EXTERNAL_REG}"
