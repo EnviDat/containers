@@ -27,7 +27,7 @@ workflow:
       -u $IMAGE_REGISTRY_USER
       --password-stdin
       $INTERNAL_REG
-    - docker buildx create --name multi-arch-builder --use
+    - docker buildx create --use
   script:
     - >
       docker buildx build "${CONTEXT_DIR}"
@@ -44,7 +44,7 @@ python-3.10-build:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers:python-3.10"
     CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
-    BASE_IMG_TAG: "3.10-slim-bulleye"
+    BASE_IMG_TAG: "3.10-slim-bullseye"
 
 .scan:
   stage: scan
