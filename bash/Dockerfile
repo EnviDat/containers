@@ -21,9 +21,9 @@ WORKDIR /home/appuser
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \
     && chown -R appuser:appuser /opt /home/appuser
-USER appuser
 # Set entrypoint and make executable
 COPY entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
+USER appuser
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["bash"]
