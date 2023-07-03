@@ -31,6 +31,7 @@ workflow:
   script:
     - >
       docker buildx build "${CONTEXT_DIR}"
+      --push
       --platform linux/arm/v7,linux/arm64/v8,linux/amd64
       --tag "${IMAGE_NAME}-unverified"
       --build-arg MAINTAINER=${MAINTAINER}
@@ -38,13 +39,22 @@ workflow:
       --build-arg INTERNAL_REG="${INTERNAL_REG}"
       --build-arg BASE_IMG_TAG="${BASE_IMG_TAG}"
 
-python-3.10-build:
-  extends:
-    - .build
+.retag:
+  stage: package
+  image: docker.io/regclient/regctl:v0.3-alpine
   variables:
-    IMAGE_NAME: "${INTERNAL_REG}/containers:python-3.10"
-    CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
-    BASE_IMG_TAG: "3.10-slim-bullseye"
+    GIT_STRATEGY: none
+  before_script:
+    - export REG_HOST=${INTERNAL_REG%/*}
+    - >
+      echo "{\"hosts\":{\"${REG_HOST}\":{\"tls\":\"enabled\",\"hostname\":
+      \"${REG_HOST}\",\"user\":\"${IMAGE_REGISTRY_USER}\",\"pass\":
+      \"${IMAGE_REGISTRY_PASS}\"}}}" >> /home/appuser/.regctl/config.json
+  script:
+    - >
+      regctl --verbosity debug image copy
+      "${IMAGE_NAME}-unverified" "${IMAGE_NAME}"
+    - regctl --verbosity debug tag delete "${IMAGE_NAME}-unverified"
 
 .scan:
   stage: scan
@@ -81,29 +91,20 @@ python-3.10-build:
     reports:
       container_scanning: $SHORT_NAME-imgscan.json
 
+python-3.10-build:
+  extends:
+    - .build
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers:python-3.10"
+    CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
+    BASE_IMG_TAG: "3.10-slim-bullseye"
+
 python-3.10-scan:
   extends:
     - .scan
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers:python-3.10"
     SHORT_NAME: "py3.10"
-
-.retag:
-  stage: package
-  image: docker.io/regclient/regctl:v0.3-alpine
-  variables:
-    GIT_STRATEGY: none
-  before_script:
-    - export REG_HOST=${INTERNAL_REG%/*}
-    - >
-      echo "{\"hosts\":{\"${REG_HOST}\":{\"tls\":\"enabled\",\"hostname\":
-      \"${REG_HOST}\",\"user\":\"${IMAGE_REGISTRY_USER}\",\"pass\":
-      \"${IMAGE_REGISTRY_PASS}\"}}}" >> /home/appuser/.regctl/config.json
-  script:
-    - >
-      regctl --verbosity debug image copy
-      "${IMAGE_NAME}-unverified" "${IMAGE_NAME}"
-    - regctl --verbosity debug tag delete "${IMAGE_NAME}-unverified"
 
 python-3.10-retag:
   extends:
