@@ -72,11 +72,10 @@ RUN set -ex \
             libgeos-c1v5 \
             libgdal32 \
     && rm -rf /var/lib/apt/lists/*
+WORKDIR /home/appuser
 COPY --from=build \
     /root/.local \
-    /home/appuser/.local
-WORKDIR /opt
-COPY . /opt/
+    ./.local
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \
     && chown -R appuser:appuser /opt /home/appuser
