@@ -1,0 +1,111 @@
+stages:
+  - build
+  - scan
+  - package
+
+variables:
+  ARTIFACT_COMPRESSION_LEVEL: "fast"
+  CACHE_COMPRESSION_LEVEL: "fast"
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: always
+
+services:
+  - docker:24-dind
+
+.build:
+  stage: build
+  image: docker.io/docker:24
+  before_script:
+    - docker login -u $IMAGE_REGISTRY_USER -p $IMAGE_REGISTRY_PASS $INTERNAL_REG
+    - docker buildx create --use
+  script:
+    - >
+      docker buildx build
+      --platform linux/arm/v7,linux/arm64/v8,linux/amd64
+      --build-context "${CONTEXT_DIR}"
+      --file "${CONTEXT_DIR}/Dockerfile"
+      --tag "${IMAGE_NAME}-unverified"
+      --build-arg MAINTAINER=${MAINTAINER}
+      --build-arg EXTERNAL_REG="${EXTERNAL_REG}"
+      --build-arg INTERNAL_REG="${INTERNAL_REG}"
+      --build-arg BASE_IMG_TAG="${BASE_IMG_TAG}"
+
+python-3.10-build:
+  extends:
+    - .build
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers:python-3.10"
+    CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
+    BASE_IMG_TAG: "3.10-slim-bulleye"
+
+.scan:
+  stage: scan
+  image:
+    name: docker.io/aquasec/trivy:0.23.0
+    entrypoint: [""]
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - trivy --version
+    - time trivy image --clear-cache
+    - time trivy --cache-dir .trivycache/ image --download-db-only --no-progress
+    # Create report artifact
+    - >
+      time trivy --cache-dir .trivycache/ image --exit-code 0 --ignore-unfixed
+      --no-progress --format template --template "@/contrib/gitlab.tpl"
+      --output "$CI_PROJECT_DIR/$SHORT_NAME-imgscan.json"
+      "${IMAGE_NAME}-unverified"
+    # Print full report
+    - >
+      time trivy --cache-dir .trivycache/ image --exit-code 0 --ignore-unfixed
+      --no-progress "${IMAGE_NAME}"-unverified
+    # Fail on critical vulnerabilities
+    - >
+      time trivy --cache-dir .trivycache/ image --exit-code 1 --ignore-unfixed
+      --severity CRITICAL --no-progress "${IMAGE_NAME}"-unverified
+  cache:
+    key: trivy-cache
+    paths:
+      - .trivycache/
+    policy: pull-push
+  artifacts:
+    when: always
+    reports:
+      container_scanning: $SHORT_NAME-imgscan.json
+
+python-3.10-scan:
+  extends:
+    - .scan
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers:python-3.10"
+    SHORT_NAME: "py3.10"
+
+.retag:
+  stage: package
+  image: docker.io/regclient/regctl:v0.3-alpine
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - export REG_HOST=${INTERNAL_REG%/*}
+    - >
+      echo "{\"hosts\":{\"${REG_HOST}\":{\"tls\":\"enabled\",\"hostname\":
+      \"${REG_HOST}\",\"user\":\"${IMAGE_REGISTRY_USER}\",\"pass\":
+      \"${IMAGE_REGISTRY_PASS}\"}}}" >> /home/appuser/.regctl/config.json
+  script:
+    - >
+      regctl --verbosity debug image copy
+      "${IMAGE_NAME}-unverified" "${IMAGE_NAME}"
+    - regctl --verbosity debug tag delete "${IMAGE_NAME}-unverified"
+
+python-3.10-retag:
+  extends:
+    - .retag
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers:python-3.10"
