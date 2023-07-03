@@ -6,8 +6,6 @@ stages:
 variables:
   ARTIFACT_COMPRESSION_LEVEL: "fast"
   CACHE_COMPRESSION_LEVEL: "fast"
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
 
 workflow:
   rules:
@@ -16,14 +14,17 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "web"'
       when: always
 
-services:
-  - docker:24-dind
-
 .build:
   stage: build
   image: docker.io/docker:24
+  services:
+    - docker:24-dind
   before_script:
-    - docker login -u $IMAGE_REGISTRY_USER -p $IMAGE_REGISTRY_PASS $INTERNAL_REG
+    - >
+      echo $IMAGE_REGISTRY_PASS | docker login
+      -u $IMAGE_REGISTRY_USER
+      --password-stdin
+      $INTERNAL_REG
     - docker buildx create --use
   script:
     - >
