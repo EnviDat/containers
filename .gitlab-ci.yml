@@ -97,7 +97,7 @@ python-3.9-build:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:9.10"
     CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
-    BASE_IMG_TAG: "3.9-slim-bookwork"
+    BASE_IMG_TAG: "3.9-slim-bookworm"
 
 python-3.9-scan:
   extends:
@@ -118,7 +118,7 @@ python-3.10-build:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.10"
     CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
-    BASE_IMG_TAG: "3.10-slim-bookwork"
+    BASE_IMG_TAG: "3.10-slim-bookworm"
 
 python-3.10-scan:
   extends:
@@ -139,7 +139,7 @@ python-3.11-build:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11"
     CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
-    BASE_IMG_TAG: "3.11-slim-bookwork"
+    BASE_IMG_TAG: "3.11-slim-bookworm"
 
 python-3.11-scan:
   extends:
@@ -160,7 +160,7 @@ python-3.11-geo-build:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11-geo"
     CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
-    BASE_IMG_TAG: "3.11-slim-bookwork"
+    BASE_IMG_TAG: "3.11-slim-bookworm"
 
 python-3.11-geo-scan:
   extends:
