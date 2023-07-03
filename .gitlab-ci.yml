@@ -91,6 +91,67 @@ workflow:
     reports:
       container_scanning: $SHORT_NAME-imgscan.json
 
+bash-build:
+  extends:
+    - .build
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/bash:latest"
+    CONTEXT_DIR: "${CI_PROJECT_DIR}/bash"
+
+bash-scan:
+  extends:
+    - .scan
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/bash:latest"
+    SHORT_NAME: "bash-latest"
+
+bash-retag:
+  extends:
+    - .retag
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/bash:latest"
+
+bash-geo-build:
+  extends:
+    - .build
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/bash:geo"
+    CONTEXT_DIR: "${CI_PROJECT_DIR}/bash-geo"
+
+bash-geo-scan:
+  extends:
+    - .scan
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/bash:geo"
+    SHORT_NAME: "bash-geo"
+
+bash-geo-retag:
+  extends:
+    - .retag
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/bash:geo"
+
+r-4-build:
+  extends:
+    - .build
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
+    CONTEXT_DIR: "${CI_PROJECT_DIR}/r"
+    BASE_IMG_TAG: "4.2.2"
+
+r-4-scan:
+  extends:
+    - .scan
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
+    SHORT_NAME: "r-4.2.2"
+
+r-4-retag:
+  extends:
+    - .retag
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
+
 python-3.9-build:
   extends:
     - .build
