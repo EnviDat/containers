@@ -39,6 +39,7 @@ RUN set -ex \
             build-essential \
             gcc \
             cmake \
+            gfortran \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=extract-deps \
     /opt/python/requirements.txt /opt/python/
