@@ -41,6 +41,8 @@ RUN set -ex \
         -y --no-install-recommends \
             nano \
             curl \
+            r-cran-data.table \
+            r-cran-httr \
             r-cran-hmisc \
             r-cran-foreign \
             r-cran-readxl \
