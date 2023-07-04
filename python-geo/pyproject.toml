@@ -6,6 +6,7 @@ authors = [
     {name = "Sam Woodcock", email = "samuel.woodocck@wsl.ch"},
 ]
 dependencies = [
+    "requests>=2.31.0",
     "pandas>=2.0.3",
     "geopandas>=0.13.2",
     "gdal>=3.7.0",
@@ -32,3 +33,5 @@ repository = "https://gitlabext.wsl.ch/EnviDat/containers"
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]
 build-backend = "pdm.pep517.api"
+
+[tool.pdm]
