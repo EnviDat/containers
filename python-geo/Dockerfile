@@ -67,6 +67,7 @@ RUN set -ex \
             libpcre3 \
             mime-support \
             postgresql-client \
+            libopenblas0 \
             libglib2.0-0 \
             libspatialindex-c6 \
             libproj25 \

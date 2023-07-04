@@ -61,6 +61,7 @@ RUN set -ex \
         -y --no-install-recommends \
             nano \
             curl \
+            libopenblas0 \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /home/appuser
 COPY --from=build \
