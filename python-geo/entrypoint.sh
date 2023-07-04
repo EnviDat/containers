@@ -16,5 +16,11 @@ fi
 chown -R appuser:appuser /data
 chmod -R 777 /data
 
+# Check if the command is "sleep"
+if [ "$1" == "sleep" ]; then
+    # Sleep instead
+    exec gosu appuser sleep infinity
+fi
+
 # Execute the CMD from the Dockerfile
 exec python "$@"
