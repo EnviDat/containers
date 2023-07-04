@@ -21,7 +21,7 @@ COPY --from=certs \
     /etc/ssl/certs/ca-certificates.crt \
     /etc/ssl/certs/ca-certificates.crt
 RUN set -ex \
-    && apt-get update || true \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
         -y --no-install-recommends locales \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
@@ -36,7 +36,7 @@ ENV LC_ALL en_US.UTF-8
 
 FROM base as runtime
 RUN set -ex \
-    && apt-get update || true \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
         -y --no-install-recommends \
             nano \

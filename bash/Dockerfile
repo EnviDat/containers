@@ -19,7 +19,7 @@ COPY --from=certs \
     /etc/ssl/certs/ca-certificates.crt \
     /etc/ssl/certs/ca-certificates.crt
 RUN set -ex \
-    && apt-get update || true \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
         -y --no-install-recommends \
             locales \
