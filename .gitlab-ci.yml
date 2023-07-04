@@ -117,6 +117,7 @@ bash-build:
 bash-scan:
   extends:
     - .scan
+  needs: ["bash-build"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/bash:latest"
     SHORT_NAME: "bash-latest"
@@ -124,6 +125,7 @@ bash-scan:
 bash-retag:
   extends:
     - .retag
+  needs: ["bash-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/bash:latest"
 
