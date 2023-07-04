@@ -49,4 +49,3 @@ COPY entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 USER appuser
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD [""]

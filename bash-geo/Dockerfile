@@ -29,4 +29,3 @@ RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false app
 COPY entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD [""]
