@@ -39,7 +39,7 @@ docker run --rm -it \
 > Note: Change the `latest` in the image name to run in different environments: `3.9`, `3.9`, `3.11-geo`.
 > Note: The `latest` tag is shorthand for the `3.11` image.
 
-### Adding custom pip packages
+### Adding additional pip packages
 
 - The pre-built containers may not have all of the dependencies required by your Python script.
 - To install dependencies before your script runs, use the `ADDITIONAL_PIP_PACKAGES` variable:
@@ -86,7 +86,7 @@ docker run --rm -it \
 
 > Note: The `latest` tag is shorthand for the `4.2.2` image.
 
-### Adding custom R packages
+### Adding additional R packages
 
 - The pre-built containers may not have all of the dependencies required by your R script.
 - To install dependencies before your script runs, use the `ADDITIONAL_R_PACKAGES` variable:
@@ -111,6 +111,33 @@ docker run --rm -it \
 wget
 gdal
 ffmpeg
+```
+
+### Running your code
+
+Run your script in the container environment with:
+
+```bash
+docker run --rm -it \
+    -v $PWD:$PWD \
+    registry-gitlab.wsl.ch/envidat/containers/bash:latest \
+    /path/to/your/script.sh
+```
+
+> Note: Change the `latest` in the image name to run in different environments: `geo`.
+
+### Adding additional Debian packages
+
+- The pre-built containers may not have all of the dependencies required by your bash script.
+- To install dependencies before your script runs, use the `ADDITIONAL_PACKAGES` variable.
+- This will install Debian packages uses `apt` prior to script execution.
+
+```bash
+docker run --rm -it \
+    -v $PWD:$PWD \
+    -e ADDITIONAL_PACKAGES=tzdata,nano \
+    registry-gitlab.wsl.ch/envidat/containers/bash:latest \
+    /path/to/your/script.sh
 ```
 
 ---
