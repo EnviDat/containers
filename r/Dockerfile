@@ -53,10 +53,11 @@ RUN set -ex \
             r-cran-sampling \
             r-cran-survey \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /home/appuser
+VOLUME /data
+WORKDIR /data
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \
-    && chown -R appuser:appuser /opt /home/appuser
+    && chown -R appuser:appuser /data /home/appuser
 # Set entrypoint and make executable
 COPY entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh

@@ -14,5 +14,9 @@ if [ -n "$ADDITIONAL_PACKAGES" ]; then
     install_packages "$ADDITIONAL_PACKAGES"
 fi
 
+# Fix permissions for user home after mount
+chown -R appuser:appuser /data
+chmod -R 777 /data
+
 # Execute the CMD from the Dockerfile as appuser
 exec gosu appuser bash "$@"

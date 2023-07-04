@@ -87,13 +87,14 @@ RUN set -ex \
             libgeos-c1v5 \
             libgdal32 \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /home/appuser
+VOLUME /data
+WORKDIR /data
 COPY --from=build \
     /root/.local \
     ./.local
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \
-    && chown -R appuser:appuser /opt /home/appuser
+    && chown -R appuser:appuser /data /home/appuser
 # Add entrypoint
 COPY entrypoint.sh /docker-entrypoint.sh
 # Pre-compile packages to .pyc (init perf gains)

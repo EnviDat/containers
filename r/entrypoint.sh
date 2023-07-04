@@ -12,5 +12,9 @@ if [ -n "$ADDITIONAL_R_PACKAGES" ]; then
     install_r_packages "$ADDITIONAL_R_PACKAGES"
 fi
 
+# Fix permissions for user home after mount
+chown -R appuser:appuser /data
+chmod -R 777 /data
+
 # Execute the CMD from the Dockerfile
 exec Rscript "$@"

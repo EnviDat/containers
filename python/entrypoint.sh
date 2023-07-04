@@ -12,5 +12,9 @@ if [ -n "$ADDITIONAL_PIP_PACKAGES" ]; then
     install_pip_packages "$ADDITIONAL_PIP_PACKAGES"
 fi
 
+# Fix permissions for user home after mount
+chown -R appuser:appuser /data
+chmod -R 777 /data
+
 # Execute the CMD from the Dockerfile
 exec python "$@"
