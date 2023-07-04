@@ -39,7 +39,9 @@ RUN set -ex \
             build-essential \
             gcc \
             cmake \
+            pkg-config \
             gfortran \
+            libopenblas-dev \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=extract-deps \
     /opt/python/requirements.txt /opt/python/
