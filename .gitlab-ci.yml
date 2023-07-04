@@ -139,6 +139,7 @@ bash-geo-build:
 bash-geo-scan:
   extends:
     - .scan
+  needs: ["bash-geo-build"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/bash:geo"
     SHORT_NAME: "bash-geo"
@@ -146,6 +147,7 @@ bash-geo-scan:
 bash-geo-retag:
   extends:
     - .retag
+  needs: ["bash-geo-retag"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/bash:geo"
 
@@ -160,6 +162,7 @@ r-4-build:
 r-4-scan:
   extends:
     - .scan
+  needs: ["r-4-build"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
     SHORT_NAME: "r-4.2.2"
@@ -167,12 +170,14 @@ r-4-scan:
 r-4-retag:
   extends:
     - .retag
+  needs: ["r-4-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
 
 r-4-tag-latest:
   extends:
     - .tag-latest
+  needs: ["r-4-retag"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/r"
     VERSION: "4.2.2"
@@ -188,6 +193,7 @@ python-3.9-build:
 python-3.9-scan:
   extends:
     - .scan
+  needs: ["python-3.9-build"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.9"
     SHORT_NAME: "py3.9"
@@ -195,6 +201,7 @@ python-3.9-scan:
 python-3.9-retag:
   extends:
     - .retag
+  needs: ["python-3.9-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.9"
 
@@ -209,6 +216,7 @@ python-3.10-build:
 python-3.10-scan:
   extends:
     - .scan
+  needs: ["python-3.10-build"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.10"
     SHORT_NAME: "py3.10"
@@ -216,6 +224,7 @@ python-3.10-scan:
 python-3.10-retag:
   extends:
     - .retag
+  needs: ["python-3.10-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.10"
 
@@ -230,6 +239,7 @@ python-3.11-build:
 python-3.11-scan:
   extends:
     - .scan
+  needs: ["python-3.11-build"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11"
     SHORT_NAME: "py3.11"
@@ -237,12 +247,14 @@ python-3.11-scan:
 python-3.11-retag:
   extends:
     - .retag
+  needs: ["python-3.11-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11"
 
 python-3.11-tag-latest:
   extends:
     - .tag-latest
+  needs: ["python-3.11-retag"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python"
     VERSION: "3.11"
@@ -258,6 +270,7 @@ python-3.11-geo-build:
 python-3.11-geo-scan:
   extends:
     - .scan
+  needs: ["python-3.11-geo-build"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11-geo"
     SHORT_NAME: "py3.11-geo"
@@ -265,5 +278,6 @@ python-3.11-geo-scan:
 python-3.11-geo-retag:
   extends:
     - .retag
+  needs: ["python-3.11-geo-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11-geo"
