@@ -13,7 +13,7 @@ RUN set -ex \
             gosu \
             wget \
             ffmpeg \
-            libgdal-dev \
+            gdal-bin \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 # Set locale
