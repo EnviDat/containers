@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker run --rm -it -v "$PWD:/data" registry-gitlab.wsl.ch/envidat/containers/r:latest code/script.R
+docker run --rm -it -v "$PWD:/data" r-test code/script.R
