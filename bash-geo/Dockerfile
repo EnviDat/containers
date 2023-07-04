@@ -2,9 +2,22 @@ ARG EXTERNAL_REG
 
 
 
+FROM ${EXTERNAL_REG}/debian:bookworm-slim as certs
+# CA-Certs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && update-ca-certificates
+
+
+
 FROM ${EXTERNAL_REG}/debian:bookworm-slim as runtime
 ARG MAINTAINER
 LABEL envidat.ch.maintainer="${MAINTAINER}"
+# CA-Certs
+COPY --from=certs \
+    /etc/ssl/certs/ca-certificates.crt \
+    /etc/ssl/certs/ca-certificates.crt
 RUN set -ex \
     && apt-get update || true \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
