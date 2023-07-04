@@ -10,6 +10,7 @@ RUN set -ex \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
         -y --no-install-recommends \
             locales \
+            gosu \
             wget \
             ffmpeg \
             libgdal32 \
@@ -27,6 +28,5 @@ RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false app
 # Set entrypoint and make executable
 COPY entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
-USER appuser
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["bash"]
