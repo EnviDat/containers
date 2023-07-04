@@ -162,11 +162,11 @@ docker run --rm -it \
 
 ### Saving a container plus code to EnviDat
 
-1. Run your container: `docker run -d --name code-container registry-gitlab.wsl.ch/envidat/containers/bash:geo sleep infinity`.
-2. Copy your code: `docker cp code-container:/opt/ /path/to/script.sh`.
+1. Run your container: `docker run -d --name code-container registry-gitlab.wsl.ch/envidat/containers/bash:geo sleep`.
+2. Copy your code: `docker cp /path/to/script.sh code-container:/code/`.
 3. Commit the container changes to an image: `docker commit code-container code-container-image`.
 4. Save the image as a .tar: `docker save code-container-image | gzip > code-container-image.tar.gz`.
-5. Upload as a dataset to your EnviDat entry.
+5. Upload the image (code + dependencies) as a dataset to your EnviDat entry.
 
 ### Using absolute paths
 
