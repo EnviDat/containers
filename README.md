@@ -142,10 +142,17 @@ docker run --rm -it \
 
 ---
 
-## Saving a container plus code to EnviDat
+## Additional Tips
+
+### Saving a container plus code to EnviDat
 
 1. Run your container: `docker run -d --name code-container registry-gitlab.wsl.ch/envidat/containers/bash:geo sleep infinity`.
 2. Copy your code: `docker cp code-container:/opt/ /path/to/script.sh`.
 3. Commit the container changes to an image: `docker commit code-container code-container-image`.
 4. Save the image as a .tar: `docker save code-container-image | gzip > code-container-image.tar.gz`.
 5. Upload as a dataset to your EnviDat entry.
+
+### Finding the absolute path to your script
+
+- Running a script requires the absolute path to be specified (from the filesystem root).
+- To find the current working directory in Linux, run: `echo $PWD`.

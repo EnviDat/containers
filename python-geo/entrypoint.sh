@@ -13,4 +13,4 @@ if [ -n "$ADDITIONAL_PIP_PACKAGES" ]; then
 fi
 
 # Execute the CMD from the Dockerfile
-exec "$@"
+exec python "$@"

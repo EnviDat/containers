@@ -15,4 +15,4 @@ if [ -n "$ADDITIONAL_PACKAGES" ]; then
 fi
 
 # Execute the CMD from the Dockerfile as appuser
-exec gosu appuser "$@"
+exec gosu appuser bash "$@"
