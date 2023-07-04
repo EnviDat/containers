@@ -149,7 +149,8 @@ docker run --rm -it \
 
 ## Demos
 
-See working demos in the `demos` directory.
+- See working demos in the `demos` directory.
+- Navigate to `demos`, then run each demo script with bash: `bash core.sh`.
 
 ---
 
