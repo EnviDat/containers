@@ -81,6 +81,7 @@ COPY --from=build \
     /root/.local \
     ./.local
 VOLUME /data
+WORKDIR /code
 WORKDIR /data
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \

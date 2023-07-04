@@ -35,6 +35,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 VOLUME /data
+WORKDIR /code
 WORKDIR /data
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \
