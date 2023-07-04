@@ -77,4 +77,4 @@ RUN chmod +x /docker-entrypoint.sh \
     && python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
 USER appuser
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["python"]
+CMD [""]
