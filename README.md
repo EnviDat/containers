@@ -63,6 +63,8 @@ docker run --rm -it \
 - The default image for R v4.2.2 contains dependencies:
 
 ```txt
+data.table
+httr
 hmisc
 foreign
 readxl
@@ -151,6 +153,8 @@ docker run --rm -it \
 
 - See working demos in the `demos` directory.
 - Navigate to `demos`, then run each demo script with bash: `bash core.sh`.
+- The Python and R demos simply transpose a online CSV file.
+- The BASH example generates CORE files, using underlying jpg2 files (see CORE spec on EnviDat).
 
 ---
 
