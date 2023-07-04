@@ -8,6 +8,7 @@ Container images for simple script execution.
 - The default images for Python 3.9, 3.10, 3.11 contains dependencies:
 
 ```txt
+requests
 numpy
 scipy
 pandas
@@ -18,6 +19,7 @@ scikit-learn
 - The python-geo (3.11 only) contains dependencies:
 
 ```txt
+requests
 pandas
 geopandas
 gdal
