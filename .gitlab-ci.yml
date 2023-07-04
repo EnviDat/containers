@@ -39,23 +39,6 @@ workflow:
       --build-arg INTERNAL_REG="${INTERNAL_REG}"
       --build-arg BASE_IMG_TAG="${BASE_IMG_TAG}"
 
-.retag:
-  stage: package
-  image: docker.io/regclient/regctl:v0.3-alpine
-  variables:
-    GIT_STRATEGY: none
-  before_script:
-    - export REG_HOST=${INTERNAL_REG%/*}
-    - >
-      echo "{\"hosts\":{\"${REG_HOST}\":{\"tls\":\"enabled\",\"hostname\":
-      \"${REG_HOST}\",\"user\":\"${IMAGE_REGISTRY_USER}\",\"pass\":
-      \"${IMAGE_REGISTRY_PASS}\"}}}" >> /home/appuser/.regctl/config.json
-  script:
-    - >
-      regctl --verbosity debug image copy
-      "${IMAGE_NAME}-unverified" "${IMAGE_NAME}"
-    - regctl --verbosity debug tag delete "${IMAGE_NAME}-unverified"
-
 .scan:
   stage: scan
   image:
@@ -90,6 +73,39 @@ workflow:
     when: always
     reports:
       container_scanning: $SHORT_NAME-imgscan.json
+
+.retag:
+  stage: package
+  image: docker.io/regclient/regctl:v0.3-alpine
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - export REG_HOST=${INTERNAL_REG%/*}
+    - >
+      echo "{\"hosts\":{\"${REG_HOST}\":{\"tls\":\"enabled\",\"hostname\":
+      \"${REG_HOST}\",\"user\":\"${IMAGE_REGISTRY_USER}\",\"pass\":
+      \"${IMAGE_REGISTRY_PASS}\"}}}" >> /home/appuser/.regctl/config.json
+  script:
+    - >
+      regctl --verbosity debug image copy
+      "${IMAGE_NAME}-unverified" "${IMAGE_NAME}"
+    - regctl --verbosity debug tag delete "${IMAGE_NAME}-unverified"
+
+.tag-latest:
+  stage: package
+  image: docker.io/regclient/regctl:v0.3-alpine
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - export REG_HOST=${INTERNAL_REG%/*}
+    - >
+      echo "{\"hosts\":{\"${REG_HOST}\":{\"tls\":\"enabled\",\"hostname\":
+      \"${REG_HOST}\",\"user\":\"${IMAGE_REGISTRY_USER}\",\"pass\":
+      \"${IMAGE_REGISTRY_PASS}\"}}}" >> /home/appuser/.regctl/config.json
+  script:
+    - >
+      regctl --verbosity debug image copy
+      "${IMAGE_NAME}:${VERSION}" "${IMAGE_NAME}:latest"
 
 bash-build:
   extends:
@@ -151,6 +167,13 @@ r-4-retag:
     - .retag
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
+
+r-4-tag-latest:
+  extends:
+    - .tag-latest
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/r"
+    VERSION: "4.2.2"
 
 python-3.9-build:
   extends:
@@ -214,6 +237,13 @@ python-3.11-retag:
     - .retag
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11"
+
+python-3.11-tag-latest:
+  extends:
+    - .tag-latest
+  variables:
+    IMAGE_NAME: "${INTERNAL_REG}/containers/python"
+    VERSION: "3.11"
 
 python-3.11-geo-build:
   extends:
