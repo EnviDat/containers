@@ -27,13 +27,14 @@ shapely
 
 ### Running your code
 
-Run your script in the container environment with:
+- Navigate to the directory containing your code.
+- Run your script in the container environment with:
 
 ```bash
 docker run --rm -it \
-    -v $PWD:$PWD \
+    -v $PWD:/data \
     registry-gitlab.wsl.ch/envidat/containers/python:latest \
-    /path/to/your/script.py
+    script_name.py
 ```
 
 > Note: Change the `latest` in the image name to run in different environments: `3.9`, `3.9`, `3.11-geo`.
@@ -46,10 +47,10 @@ docker run --rm -it \
 
 ```bash
 docker run --rm -it \
-    -v $PWD:$PWD \
+    -v $PWD:/data \
     -e ADDITIONAL_PIP_PACKAGES=requests,sqlalchemy \
     registry-gitlab.wsl.ch/envidat/containers/python:latest \
-    /path/to/your/script.py
+    script_name.py
 ```
 
 ---
@@ -75,13 +76,14 @@ survey
 
 ### Running your code
 
-Run your script in the container environment with:
+- Navigate to the directory containing your code.
+- Run your script in the container environment with:
 
 ```bash
 docker run --rm -it \
-    -v $PWD:$PWD \
+    -v $PWD:/data \
     registry-gitlab.wsl.ch/envidat/containers/r:latest \
-    /path/to/your/script.R
+    script_name.R
 ```
 
 > Note: The `latest` tag is shorthand for the `4.2.2` image.
@@ -93,10 +95,10 @@ docker run --rm -it \
 
 ```bash
 docker run --rm -it \
-    -v $PWD:$PWD \
+    -v $PWD:/data \
     -e ADDITIONAL_R_PACKAGES=packagename1,packagename2 \
     registry-gitlab.wsl.ch/envidat/containers/r:latest \
-    /path/to/your/script.R
+    script_name.R
 ```
 
 ---
@@ -115,13 +117,14 @@ ffmpeg
 
 ### Running your code
 
-Run your script in the container environment with:
+- Navigate to the directory containing your code.
+- Run your script in the container environment with:
 
 ```bash
 docker run --rm -it \
-    -v $PWD:$PWD \
+    -v $PWD:/data \
     registry-gitlab.wsl.ch/envidat/containers/bash:latest \
-    /path/to/your/script.sh
+    script_name.sh
 ```
 
 > Note: Change the `latest` in the image name to run in different environments: `geo`.
@@ -134,11 +137,17 @@ docker run --rm -it \
 
 ```bash
 docker run --rm -it \
-    -v $PWD:$PWD \
+    -v $PWD:/data \
     -e ADDITIONAL_PACKAGES=tzdata,nano \
     registry-gitlab.wsl.ch/envidat/containers/bash:latest \
-    /path/to/your/script.sh
+    script_name.sh
 ```
+
+---
+
+## Demos
+
+See working demos in the `demos` directory.
 
 ---
 
@@ -152,7 +161,10 @@ docker run --rm -it \
 4. Save the image as a .tar: `docker save code-container-image | gzip > code-container-image.tar.gz`.
 5. Upload as a dataset to your EnviDat entry.
 
-### Finding the absolute path to your script
+### Using absolute paths
 
-- Running a script requires the absolute path to be specified (from the filesystem root).
-- To find the current working directory in Linux, run: `echo $PWD`.
+- Running a script as described requires the relative path.
+- It's possible to use absolute paths if `-v $PWD:/data` is changed to `-v $PWD:$PWD`.
+- Then the paths like `/home/username/path/to/script.py` can be used.
+- Note that you must handle directory permissions in this case (they are not handled for you).
+- To find the absolute current working directory in Linux, run: `echo $PWD`.
