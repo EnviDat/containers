@@ -38,6 +38,7 @@ RUN set -ex \
         -y --no-install-recommends \
             build-essential \
             gcc \
+            pkg-config \
             libpcre3-dev \
             libpq-dev \
             libspatialindex-dev \
