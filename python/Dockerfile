@@ -76,11 +76,12 @@ RUN set -ex \
             curl \
             libopenblas0 \
     && rm -rf /var/lib/apt/lists/*
-VOLUME /data
-WORKDIR /data
+WORKDIR /home/appuser
 COPY --from=build \
     /root/.local \
     ./.local
+VOLUME /data
+WORKDIR /data
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \
     && chown -R appuser:appuser /data /home/appuser
