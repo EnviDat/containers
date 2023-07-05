@@ -36,7 +36,6 @@ workflow:
       --tag "${IMAGE_NAME}-unverified"
       --build-arg MAINTAINER=${MAINTAINER}
       --build-arg EXTERNAL_REG="${EXTERNAL_REG}"
-      --build-arg INTERNAL_REG="${INTERNAL_REG}"
       --build-arg BASE_IMG_TAG="${BASE_IMG_TAG}"
 
 .scan:
@@ -147,7 +146,7 @@ bash-geo-scan:
 bash-geo-retag:
   extends:
     - .retag
-  needs: ["bash-geo-retag"]
+  needs: ["bash-geo-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/bash:geo"
 
