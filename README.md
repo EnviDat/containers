@@ -168,6 +168,20 @@ docker run --rm -it \
 4. Save the image as a .tar: `docker save code-container-image | gzip > code-container-image.tar.gz`.
 5. Upload the image (code + dependencies) as a dataset to your EnviDat entry.
 
+### Running a saved container from EnviDat
+
+1. Download the `.tar.gz` container image.
+2. Load the image: `docker load --input code-container-image.tar.gz`.
+3. Optional, rename the image:
+
+```bash
+docker tag code-container-image new-image-name:v1
+docker image rm code-container-image
+```
+
+4. Run the container: `docker run -it -v $PWD:/data new-image-name:v1 /code/script.sh`.
+5. The script will output to your current working directory.
+
 ### Using absolute paths
 
 - Running a script as described requires the relative path.
