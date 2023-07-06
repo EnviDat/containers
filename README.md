@@ -2,6 +2,16 @@
 
 Container images for simple script execution.
 
+- The goal of this repo is to aid researchers in making their data processing reproducible.
+- Container images can package up all required dependencies for code, along with the script itself.
+- There are images available for Python, R, and Bash (shell script) currently:
+
+Python: `registry-gitlab.wsl.ch/envidat/containers/python:latest`.
+Python Geo: `registry-gitlab.wsl.ch/envidat/containers/python:3.11-geo`.
+R: `registry-gitlab.wsl.ch/envidat/containers/r:latest`.
+Bash: `registry-gitlab.wsl.ch/envidat/containers/bash:latest`.
+Bash Geo: `registry-gitlab.wsl.ch/envidat/containers/bash:geo`.
+
 ## Python
 
 - The Python image can run any Python script, including any required dependencies.
@@ -161,6 +171,17 @@ docker run --rm -it \
 ## Additional Tips
 
 ### Saving a container plus code to EnviDat
+
+Although we aim to always make these containers available for any user to run,
+we cannot guarantee they will be online forever.
+
+As a safeguard against this, it is good practice to package up your code with all
+dependencies into an exported container image, for others to run / reproduce results.
+
+If possible, your script should first download the data from an online source,
+such as https://envidat.ch.
+
+Please also include your script separately in the data repository for easy viewing.
 
 1. Run your container: `docker run -d --name code-container registry-gitlab.wsl.ch/envidat/containers/bash:geo sleep`.
 2. Copy your code: `docker cp /path/to/script.sh code-container:/code/`.
