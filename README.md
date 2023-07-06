@@ -7,9 +7,13 @@ Container images for simple script execution.
 - There are images available for Python, R, and Bash (shell script) currently:
 
 Python: `registry-gitlab.wsl.ch/envidat/containers/python:latest`.
+
 Python Geo: `registry-gitlab.wsl.ch/envidat/containers/python:3.11-geo`.
+
 R: `registry-gitlab.wsl.ch/envidat/containers/r:latest`.
+
 Bash: `registry-gitlab.wsl.ch/envidat/containers/bash:latest`.
+
 Bash Geo: `registry-gitlab.wsl.ch/envidat/containers/bash:geo`.
 
 ## Python
