@@ -185,7 +185,7 @@ python-3.9-build:
   extends:
     - .build
   variables:
-    IMAGE_NAME: "${INTERNAL_REG}/containers/python:9.10"
+    IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.9"
     CONTEXT_DIR: "${CI_PROJECT_DIR}/python"
     BASE_IMG_TAG: "3.9-slim-bookworm"
 
