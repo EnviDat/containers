@@ -187,7 +187,7 @@ r-4-build:
   extends:
     - .build
   variables:
-    IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
+    IMAGE_NAME: "${INTERNAL_REG}/containers/Rscript:4.2.2"
     CONTEXT_DIR: "${CI_PROJECT_DIR}/r"
     BASE_IMG_TAG: "4.2.2"
 
@@ -196,7 +196,7 @@ r-4-scan:
     - .scan
   needs: ["r-4-build"]
   variables:
-    IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
+    IMAGE_NAME: "${INTERNAL_REG}/containers/Rscript:4.2.2"
     SHORT_NAME: "r-4.2.2"
 
 r-4-retag:
@@ -204,14 +204,14 @@ r-4-retag:
     - .retag
   needs: ["r-4-scan"]
   variables:
-    IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
+    IMAGE_NAME: "${INTERNAL_REG}/containers/Rscript:4.2.2"
 
 r-4-dockerhub:
   extends:
     - .push-dockerhub
   needs: ["r-4-retag"]
   variables:
-    IMAGE_NAME: "r:4.2.2"
+    IMAGE_NAME: "Rscript:4.2.2"
 
 r-4-tag-latest:
   extends:
@@ -226,7 +226,7 @@ r-4-dockerhub-latest:
     - .push-dockerhub
   needs: ["r-4-tag-latest"]
   variables:
-    IMAGE_NAME: "r:latest"
+    IMAGE_NAME: "Rscript:latest"
 
 python-3.9-build:
   extends:
