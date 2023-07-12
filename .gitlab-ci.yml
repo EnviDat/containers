@@ -1,7 +1,9 @@
 stages:
   - build
   - scan
-  - package
+  - rename
+  - tag-latest
+  - push-dockerhub
 
 variables:
   ARTIFACT_COMPRESSION_LEVEL: "fast"
@@ -74,7 +76,7 @@ workflow:
       container_scanning: $SHORT_NAME-imgscan.json
 
 .retag:
-  stage: package
+  stage: rename
   image: docker.io/regclient/regctl:v0.3-alpine
   variables:
     GIT_STRATEGY: none
@@ -91,7 +93,7 @@ workflow:
     - regctl --verbosity debug tag delete "${IMAGE_NAME}-unverified"
 
 .tag-latest:
-  stage: package
+  stage: tag-latest
   image: docker.io/regclient/regctl:v0.3-alpine
   variables:
     GIT_STRATEGY: none
@@ -105,6 +107,23 @@ workflow:
     - >
       regctl --verbosity debug image copy
       "${IMAGE_NAME}:${VERSION}" "${IMAGE_NAME}:latest"
+
+.push-dockerhub:
+  stage: push-dockerhub
+  image: docker.io/regclient/regctl:v0.3-alpine
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - export REG_HOST=https://index.docker.io/v1/
+    - >
+      echo "{\"hosts\":{\"${REG_HOST}\":{\"tls\":\"enabled\",\"hostname\":
+      \"${REG_HOST}\",\"user\":\"${DOCKERHUB_USER}\",\"pass\":
+      \"${DOCKERHUB_TOKEN}\"}}}" >> /home/appuser/.regctl/config.json
+  script:
+    - >
+      regctl --verbosity debug image copy
+      "${INTERNAL_REG}/containers/${IMAGE_NAME}"
+      "docker.io/envidat/${IMAGE_NAME}"
 
 bash-build:
   extends:
@@ -128,6 +147,13 @@ bash-retag:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/bash:latest"
 
+bash-dockerhub:
+  extends:
+    - .push-dockerhub
+  needs: ["bash-retag"]
+  variables:
+    IMAGE_NAME: "bash:latest"
+
 bash-geo-build:
   extends:
     - .build
@@ -149,6 +175,13 @@ bash-geo-retag:
   needs: ["bash-geo-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/bash:geo"
+
+bash-geo-dockerhub:
+  extends:
+    - .push-dockerhub
+  needs: ["bash-geo-retag"]
+  variables:
+    IMAGE_NAME: "bash:geo"
 
 r-4-build:
   extends:
@@ -173,6 +206,13 @@ r-4-retag:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/r:4.2.2"
 
+r-4-dockerhub:
+  extends:
+    - .push-dockerhub
+  needs: ["r-4-retag"]
+  variables:
+    IMAGE_NAME: "r:4.2.2"
+
 r-4-tag-latest:
   extends:
     - .tag-latest
@@ -180,6 +220,13 @@ r-4-tag-latest:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/r"
     VERSION: "4.2.2"
+
+r-4-dockerhub-latest:
+  extends:
+    - .push-dockerhub
+  needs: ["r-4-tag-latest"]
+  variables:
+    IMAGE_NAME: "r:latest"
 
 python-3.9-build:
   extends:
@@ -204,6 +251,13 @@ python-3.9-retag:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.9"
 
+python-3.9-dockerhub:
+  extends:
+    - .push-dockerhub
+  needs: ["python-3.9-retag"]
+  variables:
+    IMAGE_NAME: "python:3.9"
+
 python-3.10-build:
   extends:
     - .build
@@ -226,6 +280,13 @@ python-3.10-retag:
   needs: ["python-3.10-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.10"
+
+python-3.10-dockerhub:
+  extends:
+    - .push-dockerhub
+  needs: ["python-3.10-retag"]
+  variables:
+    IMAGE_NAME: "python:3.10"
 
 python-3.11-build:
   extends:
@@ -250,6 +311,13 @@ python-3.11-retag:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11"
 
+python-3.11-dockerhub:
+  extends:
+    - .push-dockerhub
+  needs: ["python-3.11-retag"]
+  variables:
+    IMAGE_NAME: "python:3.11"
+
 python-3.11-tag-latest:
   extends:
     - .tag-latest
@@ -257,6 +325,13 @@ python-3.11-tag-latest:
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python"
     VERSION: "3.11"
+
+python-3.11-dockerhub-latest:
+  extends:
+    - .push-dockerhub
+  needs: ["python-3.11-tag-latest"]
+  variables:
+    IMAGE_NAME: "python:latest"
 
 python-3.11-geo-build:
   extends:
@@ -280,3 +355,10 @@ python-3.11-geo-retag:
   needs: ["python-3.11-geo-scan"]
   variables:
     IMAGE_NAME: "${INTERNAL_REG}/containers/python:3.11-geo"
+
+python-3.11-geo-dockerhub:
+  extends:
+    - .push-dockerhub
+  needs: ["python-3.11-geo-retag"]
+  variables:
+    IMAGE_NAME: "python:3.11-geo"
