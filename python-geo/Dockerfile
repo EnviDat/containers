@@ -97,7 +97,8 @@ WORKDIR /code
 WORKDIR /data
 # Add appuser user, permissions
 RUN useradd -r -u 900 -m -c "appuser account" -d /home/appuser -s /bin/false appuser \
-    && chown -R appuser:appuser /data /home/appuser
+    && chown -R appuser:appuser /data /code /home/appuser \
+    && chmod -R 777 /data /code /home/appuser
 # Add entrypoint
 COPY entrypoint.sh /docker-entrypoint.sh
 # Pre-compile packages to .pyc (init perf gains)
