@@ -10,7 +10,7 @@ Python: `registry-gitlab.wsl.ch/envidat/containers/python:latest`.
 
 Python Geo: `registry-gitlab.wsl.ch/envidat/containers/python:3.11-geo`.
 
-R: `registry-gitlab.wsl.ch/envidat/containers/Rscript:latest`.
+R: `registry-gitlab.wsl.ch/envidat/containers/rscript:latest`.
 
 Bash: `registry-gitlab.wsl.ch/envidat/containers/bash:latest`.
 
@@ -100,7 +100,7 @@ survey
 ```bash
 docker run --rm -it \
     -v $PWD:/data \
-    registry-gitlab.wsl.ch/envidat/containers/Rscript:latest \
+    registry-gitlab.wsl.ch/envidat/containers/rscript:latest \
     script_name.R
 ```
 
@@ -115,7 +115,7 @@ docker run --rm -it \
 docker run --rm -it \
     -v $PWD:/data \
     -e ADDITIONAL_R_PACKAGES=packagename1,packagename2 \
-    registry-gitlab.wsl.ch/envidat/containers/Rscript:latest \
+    registry-gitlab.wsl.ch/envidat/containers/rscript:latest \
     script_name.R
 ```
 

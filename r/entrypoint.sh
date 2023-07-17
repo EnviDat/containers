@@ -23,4 +23,4 @@ if [ "$1" == "sleep" ]; then
 fi
 
 # Execute the CMD from the Dockerfile
-exec Rscript "$@"
+exec rscript "$@"
