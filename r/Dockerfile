@@ -41,6 +41,7 @@ RUN set -ex \
         -y --no-install-recommends \
             nano \
             curl \
+            gosu \
             r-cran-data.table \
             r-cran-httr \
             r-cran-hmisc \

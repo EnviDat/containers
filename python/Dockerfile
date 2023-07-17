@@ -74,6 +74,7 @@ RUN set -ex \
         -y --no-install-recommends \
             nano \
             curl \
+            gosu \
             libopenblas0 \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /home/appuser
