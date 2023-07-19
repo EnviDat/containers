@@ -218,7 +218,7 @@ r-4-tag-latest:
     - .tag-latest
   needs: ["r-4-retag"]
   variables:
-    IMAGE_NAME: "${INTERNAL_REG}/containers/r"
+    IMAGE_NAME: "${INTERNAL_REG}/containers/rscript"
     VERSION: "4.2.2"
 
 r-4-dockerhub-latest:
